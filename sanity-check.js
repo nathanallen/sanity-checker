@@ -1,47 +1,79 @@
-var sanityCheck = (function(){
-  var self = {
-    errors: [],
+var sanityChecker = (function(){
+
+  let ERRORS = [];
+
+  let config = {
     display: {
+      target: "body",
       tagname: "div",
-      style: "position:fixed; top:0; left:20px; right:20px; background:white;",
+      style: [
+        "position: fixed;",
+        "top: 0;",
+        "left: 20px;",
+        "right: 20px;",
+        "background: white;",
+        "border: 1px dotted black;",
+        "padding: 20px;"
+      ].join(""),
       message: "There is an error in your javascript. Please open your Developer Console for the complete error message."
     }
   };
 
-  window.onerror = recordError;
-  window.onload = checkForErrors;
+  if ( isTurnedOn() ) {
+    // attach event listeners
+    window.onerror = recordError;
+    window.onload = displayWarningIfErrors;
+  }
 
-  return sanityCheck;
+  return {
+    errors: ERRORS,
+    turnOn: turnOn,
+    turnOff: turnOff
+  };
 
   ////
 
   function recordError(message, source, lineno, colno, error) {
-    self.errors.push(message);
+    ERRORS.push(message);
   };
 
-  function checkForErrors() {
-    if (self.errors.length) {
-      displayErrors();
+  function displayWarningIfErrors() {
+    if (ERRORS.length) {
+      displayWarning();
     }
   }
 
-  function displayErrors() {
-    var el = document.createElement(self.display.tagname);
+  function displayWarning() {
+    var el = document.createElement(config.display.tagname);
     el.innerHTML = (
-      "<h1 style='" + self.display.style + "'>" +
-        self.display.message +
+      "<h1 style='" + config.display.style + "'>" +
+        config.display.message +
         "<br><br>" +
-        "<ol><li>" + self.errors.join("<li>") + "<ol>" +
+        "<ol><li>" + ERRORS.join("<li>") + "<ol>" +
       "</h1>"
     );
-    document.body.appendChild(el);
+`    document.querySelector(config.display.target).appendChild(el);
   }
 
-  // TODO: speculative script-level functionality
-  function sanityCheck(scope) {
-    var file = scope.src;
-    console.log("sanityCheck:", file);
+  // // TODO: speculative script-level functionality
+  // // e.g. `<script onload='sanityCheck(this)'></script>`
+  // function sanityCheck(scope) {
+  //   var file = scope.src;
+  //   console.log("sanityCheck:", file);
+  // }
+
+  function isTurnedOn() {
+    return window.localStorage.getItem("check_for_errors") === 'true'
   }
 
+  function turnOn() {
+    window.localStorage.setItem("check_for_errors", true);
+    return true;
+  }
+
+  function turnOff() {
+    window.localStorage.setItem("check_for_errors", null);
+    return false;
+  }
 
 }());
