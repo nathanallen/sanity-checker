@@ -24,46 +24,45 @@ var sanityChecker = (function(){
 
   if ( isTurnedOn() ) {
     // attach event listeners
-    window.onerror = recordError;
-    window.onload = displayWarningIfErrors;
+    window.onerror = function recordErrors(message, source, lineno, colno, error) {
+      ERRORS.push(message);
+    };
+
+    window.onload = function displayWarningIfErrors() {
+      if (ERRORS.length) {
+        openWarningModal();
+      }
+    };
   }
 
   return {
-    errors: ERRORS,
     turnOn: turnOn,
     turnOff: turnOff,
-    closeWarningModal: closeWarningModal
+    close: closeWarningModal
   };
 
   ////
 
-  function recordError(message, source, lineno, colno, error) {
-    ERRORS.push(message);
-  };
 
-  function displayWarningIfErrors() {
-    if (ERRORS.length) {
-      displayWarningModal();
-    }
-  }
-
-  function closeWarningModal() {
-    self.el.remove();
-  }
-
-  function displayWarningModal() {
+  function openWarningModal() {
     var el = self.el = document.createElement(config.display.tagname);
     el.style = config.display.style;
     el.innerHTML = (
+      "<button style='float: right;' onclick='sanityChecker.close()'>X</button>" +
       "<h1>" + config.display.title + "</h1>" +
       "<p>" + config.display.message + "</p>" +
       "<li>" + "What file is in?" + "</li>" +
       "<li>" + "What line is it on?" + "</li>" +
       "<li>" + "What type of error is it?" + "</li>" +
-      "<button style='float: right;' onclick='sanityChecker.closeWarningModal()'>Dismiss</button>"
+      "<br>" +
+      "<small style='float:right'><a href='' onclick='sanityChecker.turnOff()'>" + "Thanks, don't show this warning anymore" + "</a></small>"
     );
 
     document.querySelector(config.display.target).appendChild(el);
+  }
+
+  function closeWarningModal() {
+    self.el.remove();
   }
 
   function isTurnedOn() {
@@ -76,8 +75,9 @@ var sanityChecker = (function(){
   }
 
   function turnOff() {
+    closeWarningModal();
     window.localStorage.setItem("check_for_errors", null);
-    return false;
+    return false; // prevent default
   }
 
 }());
