@@ -12,10 +12,13 @@ var sanityChecker = (function(){
         "left: 20px;",
         "right: 20px;",
         "background: white;",
-        "border: 1px dotted black;",
-        "padding: 20px;"
+        "border: 10px double red;",
+        "overflow: hidden;",
+        "padding: 20px;",
+        "z-index: 10000000;"
       ].join(""),
-      message: "There is an error in your javascript. Please open your Developer Console for the complete error message."
+      title: "Uh oh! Something is broken in your Javascript!",
+      message: "Please open your Developer Console to read the full error message."
     }
   };
 
@@ -28,7 +31,8 @@ var sanityChecker = (function(){
   return {
     errors: ERRORS,
     turnOn: turnOn,
-    turnOff: turnOff
+    turnOff: turnOff,
+    closeWarningModal: closeWarningModal
   };
 
   ////
@@ -39,31 +43,31 @@ var sanityChecker = (function(){
 
   function displayWarningIfErrors() {
     if (ERRORS.length) {
-      displayWarning();
+      displayWarningModal();
     }
   }
 
-  function displayWarning() {
-    var el = document.createElement(config.display.tagname);
-    el.innerHTML = (
-      "<h1 style='" + config.display.style + "'>" +
-        config.display.message +
-        "<br><br>" +
-        "<ol><li>" + ERRORS.join("<li>") + "<ol>" +
-      "</h1>"
-    );
-`    document.querySelector(config.display.target).appendChild(el);
+  function closeWarningModal() {
+    self.el.remove();
   }
 
-  // // TODO: speculative script-level functionality
-  // // e.g. `<script onload='sanityCheck(this)'></script>`
-  // function sanityCheck(scope) {
-  //   var file = scope.src;
-  //   console.log("sanityCheck:", file);
-  // }
+  function displayWarningModal() {
+    var el = self.el = document.createElement(config.display.tagname);
+    el.style = config.display.style;
+    el.innerHTML = (
+      "<h1>" + config.display.title + "</h1>" +
+      "<p>" + config.display.message + "</p>" +
+      "<li>" + "What file is in?" + "</li>" +
+      "<li>" + "What line is it on?" + "</li>" +
+      "<li>" + "What type of error is it?" + "</li>" +
+      "<button style='float: right;' onclick='sanityChecker.closeWarningModal()'>Dismiss</button>"
+    );
+
+    document.querySelector(config.display.target).appendChild(el);
+  }
 
   function isTurnedOn() {
-    return window.localStorage.getItem("check_for_errors") === 'true'
+    return window.localStorage.getItem("check_for_errors") === 'true';
   }
 
   function turnOn() {
