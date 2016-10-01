@@ -72,17 +72,20 @@ var sanityChecker = (function(){
   function openWarningModal() {
     let el = self.el = document.createElement("div");
 
-    el.style = [
-      "position: fixed;",
-      "top: 20px;",
-      "right: 20px;",
-      "max-width: 600px;",
-      "background: white;",
-      "border: 10px double red;",
-      "overflow: hidden;",
-      "padding: 20px;",
-      "z-index: 10000000;"
-    ].join("")
+    el.setAttribute(
+      "style",
+      [
+        "position: fixed;",
+        "top: 20px;",
+        "right: 20px;",
+        "max-width: 600px;",
+        "background: white;",
+        "border: 10px double red;",
+        "overflow: hidden;",
+        "padding: 20px;",
+        "z-index: 10000000;"
+      ].join("")
+    );
 
     el.innerHTML = (
       "<button style='float: right;' onclick='sanityChecker.close()'>X</button>" +
