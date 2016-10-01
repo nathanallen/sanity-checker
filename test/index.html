@@ -24,8 +24,9 @@
     </script>
 
     <li><button onclick="injectExternal('script', 'src', 'broken-app.js')">load broken-app.js</button>
-    <li><button onclick="injectExternal('script', 'src', 'i-do-not-exist.js')">load i-do-not-exist.js</button>
-    <li><button onclick="injectExternal('script', 'src', 'https://ajax.googleapis.com/ajax/libs/angularjs/1.5.2/angular-route.min.js')">load external script with dependency</button>
+    <li><button onclick="injectExternal('script', 'src', 'i-do-not-exist.js')">load local i-do-not-exist.js</button>
+    <li><button onclick="injectExternal('script', 'src', 'http://google.com/i-do-not-exist.js')">load remote i-do-not-exist.js</button>
+    <li><button onclick="injectExternal('script', 'src', 'https://ajax.googleapis.com/ajax/libs/angularjs/1.5.2/angular-route.min.js')">load remote script with dependency</button>
     <!-- <li><button onclick="injectExternal('link', 'href', 'i-do-not-exist.css')">i-do-not-exist.css</button> -->
 
   <!-- END TEST SCRIPT TRIGGERS -->

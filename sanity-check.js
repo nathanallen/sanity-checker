@@ -1,6 +1,7 @@
 var sanityChecker = (function(){
 
   let self = {
+    origin: window.location.origin,
     script: document.currentScript,
     storage: JSON.parse(window.localStorage.getItem("sanityChecker") || '{}'),
     errors: [],
@@ -22,17 +23,14 @@ var sanityChecker = (function(){
     // attach event listeners
     window.addEventListener("error", function(e){
       if (e.message) {
-        if (!e.filename) {
-          // i.e. failed to load a script from a different origin
-          //      unfortunately we cannot specify *which*.
-          self.errors.push("Remote Script Not Found");
-        } else {
-          // TODO: add e.filename, e.lineno, e.colno
-          self.errors.push(e.message);
-        }
-      } else if (e.srcElement !== window) {
+        self.errors.push(e.message);
+      } else if (e.srcElement.src.startsWith(self.origin)) {
         // i.e. failed to find a local script (from the same origin)
         self.errors.push("Local Script Not Found: " + e.srcElement.src);
+      } else {
+        // i.e. failed to load a script from a different origin
+        //      unfortunately we cannot specify *which*.
+        self.errors.push("Remote Script Not Found");
       }
       if (window_is_loaded && self.errors.length) {
         printErrorMessages();
