@@ -5,11 +5,10 @@ var sanityChecker = (function(){
   let override = JSON.parse(thisScript.getAttribute("data-config") || '{}');
 
   let config = {
-    image:   override.image   || "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAABNklEQVR4Ab3TtWFVURzA4S/X4oO8MbAWf7JCPCV0VLivEJsCXSGuE1BxG/xPqmcHSZXv11456txVOjYcqNX2rWup/MMtJ2KoY7cglXkuhE1LGqZOa1iyKYSnMonnwlezMl3IzPoqPE4HE766KMVFX4WbuqicCLOYxoQc5CYwjTnhWKmrJWzKTNv2ykdrYM1Hr22bltkUWrrWhSXwWghN0BTCK7AsrOk6EBqY8FEIL8ALIXw0gYawr6sWppBb0/TCMlj2QtOaHFNCnbzwD90X6A7JP3SHlEyaEbe89em0t24ZIZ10d1lR2BC6WVcgsyW0dFWOhVk8FEM9wJxwqEyPxhV33Rvqjiu+CteQHj5zyeGb8014JJF5JoRNy93jvWxTCI9kZ79Ah677h0rbun21z/asaiqds9/ww5+vl4reiAAAAABJRU5ErkJggg==",
-    title:   override.title   || "Oh No! Your Javascript is Broken!",
-    message: override.message || "There is an error in your Javascript. Please open your Developer Console to read the full error message.",
-    bullets: override.bullets || ["What file is it in?", "What line is it on?", "What type of error is it?"],
-    noShow:  override.noShow  || "Thanks, don't show this warning anymore."
+    image:    override.image    || "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAABNklEQVR4Ab3TtWFVURzA4S/X4oO8MbAWf7JCPCV0VLivEJsCXSGuE1BxG/xPqmcHSZXv11456txVOjYcqNX2rWup/MMtJ2KoY7cglXkuhE1LGqZOa1iyKYSnMonnwlezMl3IzPoqPE4HE766KMVFX4WbuqicCLOYxoQc5CYwjTnhWKmrJWzKTNv2ykdrYM1Hr22bltkUWrrWhSXwWghN0BTCK7AsrOk6EBqY8FEIL8ALIXw0gYawr6sWppBb0/TCMlj2QtOaHFNCnbzwD90X6A7JP3SHlEyaEbe89em0t24ZIZ10d1lR2BC6WVcgsyW0dFWOhVk8FEM9wJxwqEyPxhV33Rvqjiu+CteQHj5zyeGb8014JJF5JoRNy93jvWxTCI9kZ79Ah677h0rbun21z/asaiqds9/ww5+vl4reiAAAAABJRU5ErkJggg==",
+    title:    override.title    || "Oh No! Your Javascript is Broken!",
+    message:  override.message  || "There is an error in your Javascript. Please open your Developer Console to read the full error message.",
+    noShow:   override.noShow   || "Thanks, don't show this warning anymore."
   };
 
   if ( isTurnedOn() ) {
@@ -56,19 +55,9 @@ var sanityChecker = (function(){
         config.title +
       "</h1>" +
       "<p>" + config.message + "</p>" +
-      "<ul style='max-width: 600px; margin: 0 auto; text-align: left;'>" +
-
-        config.bullets.map(function(text){
-          return "<li>" + text + "</li>";
-        }).join("") +
-
-      "</ul>" +
-      "<br>" +
-      "<small style='float:right;'>" +
-        "<a href='' onclick='sanityChecker.turnOff()'>" +
-          config.noShow +
-        "</a>" +
-      "</small>"
+      "<a style='float:right; font-size: .85em' href='' onclick='sanityChecker.turnOff()'>" +
+        config.noShow +
+      "</a>"
     );
 
     document.querySelector("body").appendChild(el);
