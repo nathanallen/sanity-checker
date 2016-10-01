@@ -8,7 +8,20 @@ var sanityChecker = (function(){
     verbose: true
   };
 
-  let override = JSON.parse(self.script.getAttribute("data-config") || '{}');
+  let override = (function(){
+    // converts x-url-formencoded configuration string into hash
+    let query_string = self.script.getAttribute("data-config");
+    if (!query_string) { return {}; }
+    let out = {};
+    query_string.substr(1).split("&").forEach(function(param){
+      let pair = param.split("=");
+      if (pair[1]) {
+        out[pair[0]] = decodeURIComponent(pair[1]).replace(/\+/g, " ");
+      }
+    })
+    return out;
+  }());
+
   let config = {
     image:    override.image    || "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAABNklEQVR4Ab3TtWFVURzA4S/X4oO8MbAWf7JCPCV0VLivEJsCXSGuE1BxG/xPqmcHSZXv11456txVOjYcqNX2rWup/MMtJ2KoY7cglXkuhE1LGqZOa1iyKYSnMonnwlezMl3IzPoqPE4HE766KMVFX4WbuqicCLOYxoQc5CYwjTnhWKmrJWzKTNv2ykdrYM1Hr22bltkUWrrWhSXwWghN0BTCK7AsrOk6EBqY8FEIL8ALIXw0gYawr6sWppBb0/TCMlj2QtOaHFNCnbzwD90X6A7JP3SHlEyaEbe89em0t24ZIZ10d1lR2BC6WVcgsyW0dFWOhVk8FEM9wJxwqEyPxhV33Rvqjiu+CteQHj5zyeGb8014JJF5JoRNy93jvWxTCI9kZ79Ah677h0rbun21z/asaiqds9/ww5+vl4reiAAAAABJRU5ErkJggg==",
     title:    override.title    || "Oh No! Your Javascript is Broken!",
@@ -71,9 +84,9 @@ var sanityChecker = (function(){
   ////
 
   function openWarningModal() {
-    let el = self.el = document.createElement("div");
+    self.el = self.el || document.createElement("div");
 
-    el.setAttribute(
+    self.el.setAttribute(
       "style",
       [
         "position: fixed;",
@@ -88,7 +101,7 @@ var sanityChecker = (function(){
       ].join("")
     );
 
-    el.innerHTML = (
+    self.el.innerHTML = (
       "<button style='float: right;' onclick='sanityChecker.close()'>X</button>" +
       "<h1>" +
         "<img style='float: left; padding-right: .3em;' src='" + config.image + "'>" +
@@ -97,7 +110,7 @@ var sanityChecker = (function(){
       "<p>" + config.message + "</p>" + noShowButton()
     );
 
-    document.querySelector("body").appendChild(el);
+    document.querySelector("body").appendChild(self.el);
 
     ////
       function noShowButton() {

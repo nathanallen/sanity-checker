@@ -2,10 +2,46 @@
 <html>
 <head>
   <title></title>
-  <script src="../sanity-check.js"></script>
+  <script>
+    // create SanityChecker script tag on pageload
+    var sanityCheckerScript = document.createElement("script");
+    sanityCheckerScript.src = "../sanity-check.js"
+
+    // check for and apply any custom configuration options
+    if (window.location.search) {
+      try {
+
+        // var json_config_str = decodeURI(window.location.search.substr(1));
+        // JSON.parse(json_config_str); // ensure json is well formed
+        sanityCheckerScript.setAttribute("data-config", window.location.search);
+
+      } catch (e) {
+
+        if (confirm("Failed to parse json configuration options from query string. Do you want to clear the query parameter?")) {
+          window.location.replace(window.location.pathname);
+        }
+
+      }
+    }
+
+    // inject the SanityChecker script
+    document.querySelector("head").appendChild(sanityCheckerScript);
+  </script>
 </head>
 <body>
 
+  <!-- START CUSTOM CONFIGURATIONS -->
+    <strong>Config Options (reloads page):</strong>
+    <form>
+      <input name="title" value="Custom Title" placeholder="title">
+      <input name="message" value="Custom Message" placeholder="message">
+      <input name="image" value="http://placehold.it/200/f00?text=[logo]" placeholder="image">
+      <input type="submit">
+    </form>
+  <!-- END CUSTOM CONFIGURATIONS -->
+
+  <br>
+  <br>
 
   <!-- START TEST SCRIPT TRIGGERS -->
 
