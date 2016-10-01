@@ -16,12 +16,23 @@ var sanityChecker = (function(){
   };
 
   if ( isTurnedOn() ) {
+    window_is_loaded = false;
+
     // attach event listeners
-    window.onerror = function recordErrors(message, source, lineno, colno, error) {
-      self.errors.push(message);
-    };
+    window.addEventListener("error", function(e){
+      if (e.message) {
+        // TODO: e.filename, e.lineno, e.colno
+        self.errors.push(e.message);
+      } else if (e.srcElement !== window) {
+        self.errors.push("Script Not Found: " + e.srcElement.src);
+      }
+      if (window_is_loaded && self.errors.length) {
+        openWarningModal();
+      }
+    }, {capture: true});
 
     window.onload = function displayWarningIfErrors() {
+      window_is_loaded = true;
       if (self.errors.length) {
         openWarningModal();
       }
