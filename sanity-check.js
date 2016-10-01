@@ -22,10 +22,17 @@ var sanityChecker = (function(){
     // attach event listeners
     window.addEventListener("error", function(e){
       if (e.message) {
-        // TODO: e.filename, e.lineno, e.colno
-        self.errors.push(e.message);
+        if (!e.filename) {
+          // i.e. failed to load a script from a different origin
+          //      unfortunately we cannot specify *which*.
+          self.errors.push("Remote Script Not Found");
+        } else {
+          // TODO: add e.filename, e.lineno, e.colno
+          self.errors.push(e.message);
+        }
       } else if (e.srcElement !== window) {
-        self.errors.push("Script Not Found: " + e.srcElement.src);
+        // i.e. failed to find a local script (from the same origin)
+        self.errors.push("Local Script Not Found: " + e.srcElement.src);
       }
       if (window_is_loaded && self.errors.length) {
         printErrorMessages();
