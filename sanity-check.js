@@ -8,7 +8,6 @@ var sanityChecker = (function(){
       tagname: "div",
       style: [
         "position: fixed;",
-        "text-align: center;",
         "top: 20px;",
         "right: 20px;",
         "max-width: 600px;",
@@ -18,6 +17,7 @@ var sanityChecker = (function(){
         "padding: 20px;",
         "z-index: 10000000;"
       ].join(""),
+      img: document.currentScript.getAttribute("data-img-src") || "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAABNklEQVR4Ab3TtWFVURzA4S/X4oO8MbAWf7JCPCV0VLivEJsCXSGuE1BxG/xPqmcHSZXv11456txVOjYcqNX2rWup/MMtJ2KoY7cglXkuhE1LGqZOa1iyKYSnMonnwlezMl3IzPoqPE4HE766KMVFX4WbuqicCLOYxoQc5CYwjTnhWKmrJWzKTNv2ykdrYM1Hr22bltkUWrrWhSXwWghN0BTCK7AsrOk6EBqY8FEIL8ALIXw0gYawr6sWppBb0/TCMlj2QtOaHFNCnbzwD90X6A7JP3SHlEyaEbe89em0t24ZIZ10d1lR2BC6WVcgsyW0dFWOhVk8FEM9wJxwqEyPxhV33Rvqjiu+CteQHj5zyeGb8014JJF5JoRNy93jvWxTCI9kZ79Ah677h0rbun21z/asaiqds9/ww5+vl4reiAAAAABJRU5ErkJggg==",
       title: "Uh oh! Something is broken in your Javascript!",
       message: "Please open your Developer Console to read the full error message.",
       bullets: [
@@ -54,8 +54,12 @@ var sanityChecker = (function(){
     var el = self.el = document.createElement(config.display.tagname);
     el.style = config.display.style;
     el.innerHTML = (
+
       "<button style='float: right;' onclick='sanityChecker.close()'>X</button>" +
-      "<h1>" + config.display.title + "</h1>" +
+      "<h1>" +
+        "<img style='float: left; padding-right: .3em;' src='" + config.display.img + "'>" +
+        config.display.title +
+      "</h1>" +
       "<ul style='max-width: 600px; margin: 0 auto; text-align: left;'>" +
         "<p>" + config.display.message + "</p>" +
 
