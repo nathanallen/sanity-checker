@@ -24,6 +24,9 @@ var sanityChecker = (function(){
     window.addEventListener("error", function(e){
       if (e.message) {
         self.errors.push(e.message);
+      } else if (["IMG", "LINK"].includes(e.srcElement.tagName)) {
+        // TODO: capture img / link load errrors?
+        return;
       } else if (e.srcElement.src.startsWith(self.origin)) {
         // i.e. failed to find a local script (from the same origin)
         self.errors.push("Local Script Not Found: " + e.srcElement.src);
