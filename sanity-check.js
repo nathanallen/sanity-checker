@@ -8,9 +8,10 @@ var sanityChecker = (function(){
       tagname: "div",
       style: [
         "position: fixed;",
-        "top: 0;",
-        "left: 20px;",
+        "text-align: center;",
+        "top: 20px;",
         "right: 20px;",
+        "max-width: 600px;",
         "background: white;",
         "border: 10px double red;",
         "overflow: hidden;",
@@ -18,7 +19,12 @@ var sanityChecker = (function(){
         "z-index: 10000000;"
       ].join(""),
       title: "Uh oh! Something is broken in your Javascript!",
-      message: "Please open your Developer Console to read the full error message."
+      message: "Please open your Developer Console to read the full error message.",
+      bullets: [
+        "What file is it in?",
+        "What line is it on?",
+        "What type of error is it?"
+      ]
     }
   };
 
@@ -50,12 +56,20 @@ var sanityChecker = (function(){
     el.innerHTML = (
       "<button style='float: right;' onclick='sanityChecker.close()'>X</button>" +
       "<h1>" + config.display.title + "</h1>" +
-      "<p>" + config.display.message + "</p>" +
-      "<li>" + "What file is in?" + "</li>" +
-      "<li>" + "What line is it on?" + "</li>" +
-      "<li>" + "What type of error is it?" + "</li>" +
+      "<ul style='max-width: 600px; margin: 0 auto; text-align: left;'>" +
+        "<p>" + config.display.message + "</p>" +
+
+        config.display.bullets.map(function(text){
+          return "<li>" + text + "</li>";
+        }).join("") +
+
+      "</ul>" +
       "<br>" +
-      "<small style='float:right'><a href='' onclick='sanityChecker.turnOff()'>" + "Thanks, don't show this warning anymore" + "</a></small>"
+      "<small style='float:right;'>" +
+        "<a href='' onclick='sanityChecker.turnOff()'>" +
+          "Thanks, don't show this warning anymore." +
+        "</a>" +
+      "</small>"
     );
 
     document.querySelector(config.display.target).appendChild(el);
