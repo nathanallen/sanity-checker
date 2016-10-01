@@ -3,7 +3,8 @@ var sanityChecker = (function(){
   let self = {
     script: document.currentScript,
     storage: JSON.parse(window.localStorage.getItem("sanityChecker") || '{}'),
-    errors: []
+    errors: [],
+    verbose: true
   };
 
   let override = JSON.parse(self.script.getAttribute("data-config") || '{}');
@@ -27,6 +28,7 @@ var sanityChecker = (function(){
         self.errors.push("Script Not Found: " + e.srcElement.src);
       }
       if (window_is_loaded && self.errors.length) {
+        printErrorMessages();
         openWarningModal();
       }
     }, {capture: true});
@@ -39,6 +41,18 @@ var sanityChecker = (function(){
     };
   }
 
+  // verbose error logging for debugging
+  var printErrorMessages = (function() {
+    if (self.verbose) {
+      return function printErrorMessages() {
+        var title = "SanityChecker Errors\n--------------------\n";
+        var error_output = " * " + self.errors.join("\n * ");
+        console.log(title + error_output);
+      }
+    }
+    return function noop(){};
+  }());
+
   return {
     turnOn: turnOn,
     turnOff: turnOff,
@@ -47,7 +61,6 @@ var sanityChecker = (function(){
   };
 
   ////
-
 
   function openWarningModal() {
     let el = self.el = document.createElement("div");
