@@ -129,27 +129,25 @@ var sanityChecker = (function(){
         "<img style='float: left; padding-right: .3em;' src='" + config.image + "'>" +
         config.title +
       "</h1>" +
-      "<p>" + config.message + "</p>" + noShowButton()
+      "<p>" + config.message + "</p>"
     );
 
+    if ( showCount() >= config.minCount ) {
+      el.innerHTML += (
+        "<a style='float:right; font-size: .85em' href='' onclick='window.parent.sanityChecker.turnOff(); return false;'>" +
+          config.noShow +
+        "</a>"
+      );
+    }
+
     return el.outerHTML;
-
-    ////
-
-      function noShowButton() {
-        return ( bumpShowCount() < config.minCount ) ? "" : (
-          "<a style='float:right; font-size: .85em' href='' onclick='window.parent.sanityChecker.turnOff(); return false;'>" +
-            config.noShow +
-          "</a>"
-        );
-      }
-
   }
 
   function openWarningModal() {
     let iframe = buildIframe();
     iframe.srcdoc = buildWarningMessage();
     document.querySelector("body").appendChild(iframe);
+    bumpShowCount();
   }
 
   function closeWarningModal() {
@@ -170,9 +168,13 @@ var sanityChecker = (function(){
     setStorage("check_for_errors", false);
   }
 
+  function showCount() {
+    return getStorage("show_count") || 0;
+  }
+
   function bumpShowCount() {
-    var count = getStorage("show_count") || 0;
-    setStorage("show_count", count+1);
+    var count = showCount() + 1;
+    setStorage("show_count", count);
     return count;
   }
 
