@@ -37,32 +37,14 @@ var sanityChecker = (function(){
     window_is_loaded = false;
 
     // attach event listeners
-    window.addEventListener("error", function(e){
-      if (e.message) {
-        self.errors.push(e.message);
-      } else if (["IMG", "LINK"].includes(e.srcElement.tagName)) {
-        // TODO: capture img / link load errrors?
-        return;
-      } else if (e.srcElement.src.startsWith(self.origin)) {
-        // i.e. failed to find a local script (from the same origin)
-        self.errors.push("Local Script Not Found: " + e.srcElement.src);
-      } else {
-        // i.e. failed to load a script from a different origin
-        //      unfortunately we cannot specify *which*.
-        self.errors.push("Remote Script Not Found");
-      }
-      if (window_is_loaded && self.errors.length) {
-        printErrorMessages();
-        openWarningModal();
-      }
-    }, {capture: true});
-
+    window.addEventListener("error", onError, {capture: true});
     window.onload = function displayWarningIfErrors() {
       window_is_loaded = true;
       if (self.errors.length) {
         openWarningModal();
       }
     };
+
   }
 
   // verbose error logging for debugging
@@ -85,6 +67,26 @@ var sanityChecker = (function(){
   };
 
   ////
+
+  function onError(e){
+    if (e.message) {
+      self.errors.push(e.message);
+    } else if (["IMG", "LINK"].includes(e.srcElement.tagName)) {
+      // TODO: capture img / link load errrors?
+      return;
+    } else if (e.srcElement.src.startsWith(self.origin)) {
+      // i.e. failed to find a local script (from the same origin)
+      self.errors.push("Local Script Not Found: " + e.srcElement.src);
+    } else {
+      // i.e. failed to load a script from a different origin
+      //      unfortunately we cannot specify *which*.
+      self.errors.push("Remote Script Not Found");
+    }
+    if (window_is_loaded && self.errors.length) {
+      printErrorMessages();
+      openWarningModal();
+    }
+  }
 
   function buildIframe() {
     if ( self.iframe ) { return self.iframe; }
@@ -166,6 +168,7 @@ var sanityChecker = (function(){
   function turnOff() {
     closeWarningModal();
     setStorage("check_for_errors", false);
+    window.removeEventListener("error", onError, {capture: true});
   }
 
   function showCount() {
