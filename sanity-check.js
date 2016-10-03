@@ -86,26 +86,45 @@ var sanityChecker = (function(){
 
   ////
 
-  function openWarningModal() {
-    self.el = self.el || document.createElement("div");
+  function buildIframe() {
+    if ( self.iframe ) { return self.iframe; }
 
-    self.el.setAttribute(
+    self.iframe = document.createElement("iframe");
+    self.iframe.sandbox = "allow-scripts allow-same-origin";
+    self.iframe.scrolling = "no";
+    self.iframe.onload = function() {
+      // sets iframe height to height of iframe body
+      this.height = this.contentWindow.document.body.scrollHeight + "px";
+    }
+    self.iframe.setAttribute("style",
+      [
+        "position: fixed",
+        "width: 100%",
+        "max-width: 600px",
+        "top: 20px",
+        "right: 20px",
+        "z-index: 1000000px"
+      ].join(";")
+    )
+
+    return self.iframe;
+  }
+
+  function buildWarningMessage() {
+    let el = document.createElement("div");
+
+    el.setAttribute(
       "style",
       [
-        "position: fixed;",
-        "top: 20px;",
-        "right: 20px;",
-        "max-width: 600px;",
-        "background: white;",
-        "border: 10px double red;",
-        "overflow: hidden;",
-        "padding: 20px;",
-        "z-index: 10000000;"
-      ].join("")
+        "background: white",
+        "border: 10px double red",
+        "overflow: hidden",
+        "padding: 20px",
+      ].join(";")
     );
 
-    self.el.innerHTML = (
-      "<button style='float: right;' onclick='sanityChecker.close()'>X</button>" +
+    el.innerHTML = (
+      "<button style='float: right;' onclick='window.parent.sanityChecker.close()'>X</button>" +
       "<h1>" +
         "<img style='float: left; padding-right: .3em;' src='" + config.image + "'>" +
         config.title +
@@ -113,20 +132,28 @@ var sanityChecker = (function(){
       "<p>" + config.message + "</p>" + noShowButton()
     );
 
-    document.querySelector("body").appendChild(self.el);
+    return el.outerHTML;
 
     ////
+
       function noShowButton() {
         return ( bumpShowCount() < config.minCount ) ? "" : (
-          "<a style='float:right; font-size: .85em' href='' onclick='sanityChecker.turnOff(); return false;'>" +
+          "<a style='float:right; font-size: .85em' href='' onclick='window.parent.sanityChecker.turnOff(); return false;'>" +
             config.noShow +
           "</a>"
         );
       }
+
+  }
+
+  function openWarningModal() {
+    let iframe = buildIframe();
+    iframe.srcdoc = buildWarningMessage();
+    document.querySelector("body").appendChild(iframe);
   }
 
   function closeWarningModal() {
-    self.el.remove();
+    self.iframe.remove();
   }
 
   function isTurnedOn() {
