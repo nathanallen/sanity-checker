@@ -17,6 +17,21 @@
   </script>
 </head>
 <body>
+  <!-- START LOCALSTORAGE HELPER  -->
+    <strong>Local Storage:</strong>
+    <button onclick="localStorage.removeItem('sanityChecker'); displayLocalStorage()">reset localStorage</button>
+    <pre></pre>
+    <script type="text/javascript">
+      function displayLocalStorage() {
+        document.querySelector("pre").innerText = localStorage.getItem('sanityChecker') || "null"
+      }
+      displayLocalStorage();
+      window.onclick = displayLocalStorage; // refresh for ALL THE CLICKS (esp. buttons)
+    </script>
+  <!-- END LOCALSTORAGE HELPER  -->
+
+  <br>
+  <br>
 
   <!-- START CUSTOM CONFIGURATIONS -->
     <strong>Config Options (reloads page):</strong>
