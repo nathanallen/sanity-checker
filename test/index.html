@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title></title>
+  <title>SanityChecker.js Dashboard</title>
   <script>
     // create SanityChecker script tag on pageload
     var sanityCheckerScript = document.createElement("script");
@@ -17,8 +17,10 @@
   </script>
 </head>
 <body>
+  <h1>SanityChecker.js Testing Dashboard</h1>
+
   <!-- START LOCALSTORAGE HELPER  -->
-    <strong>Local Storage:</strong>
+    <strong>1. View Local Storage:</strong>
     <button onclick="localStorage.removeItem('sanityChecker'); displayLocalStorage()">reset localStorage</button>
     <pre></pre>
     <script type="text/javascript">
@@ -34,9 +36,10 @@
   <br>
 
   <!-- START CUSTOM CONFIGURATIONS -->
-    <strong>Config Options (reloads page):</strong>
-    <a href="?title=Custom+Title&message=Custom+Message&image=http%3A%2F%2Fplacehold.it%2F200%2Ff00%3Ftext%3D%5Blogo%5D">Fill All Fields</a>,
-    <a href="?">Reset</a>
+    <strong>2. Apply Custom Configuration Options:</strong><br>
+    <p>
+      Pre-Set Options: <a href="?title=Custom+Title&message=Custom+Message&image=http%3A%2F%2Fplacehold.it%2F200%2Ff00%3Ftext%3D%5Blogo%5D">Fill All Fields</a>, <a href="?">Reset</a>
+    </p>
     <form>
       <input name="title" placeholder="title">
       <input name="message" placeholder="message">
@@ -60,7 +63,7 @@
 
   <!-- START TEST SCRIPT TRIGGERS -->
 
-    <strong>Error Triggers:</strong>
+    <strong>3. Trigger Javascript Errors:</strong><br>
     <li><button onclick="throw new Error('woops')">throw Error</button>
     <li><button onclick="throw new SyntaxError('woops')">throw SyntaxError</button>
     <li><button onclick="throw new ReferenceError('woops')">throw ReferenceError</button>
@@ -87,14 +90,16 @@
 
 
 
-
+  <p>
+  &lt;-- BEGIN Placeholder text so we can scroll. --&gt;
+  </p>
 
   <p>
     Trust fund hoodie iPhone craft beer jean shorts dreamcatcher biodiesel before they sold out cliche. Vegan seitan thundercats Four Loko tumblr farm-to-table. Blog mixtape stumptown Carles Pitchfork chambray butcher Wayfarers McSweeney's. Squid blog Wayfarers craft beer farm-to-table.
   </p>
 
   <p>
-    Food truck sartorial cardigan raw denim twee vegan jean shorts you probably haven't heard of them single-origin coffee. Keffiyeh fanny pack tattooed organic fixie Four Loko high life Banksy chambray. Trust fund cardigan single-origin coffee Shoreditch blog mustache synth +1 ethical. Iphone quinoa tumblr you probably haven't heard of them high life gentrify gluten-free Austin.
+    More placeholder text so we can scroll. Food truck sartorial cardigan raw denim twee vegan jean shorts you probably haven't heard of them single-origin coffee. Keffiyeh fanny pack tattooed organic fixie Four Loko high life Banksy chambray. Trust fund cardigan single-origin coffee Shoreditch blog mustache synth +1 ethical. Iphone quinoa tumblr you probably haven't heard of them high life gentrify gluten-free Austin.
   </p>
 
 
@@ -129,6 +134,10 @@
 
   <p>
     Food truck sartorial cardigan raw denim twee vegan jean shorts you probably haven't heard of them single-origin coffee. Keffiyeh fanny pack tattooed organic fixie Four Loko high life Banksy chambray. Trust fund cardigan single-origin coffee Shoreditch blog mustache synth +1 ethical. Iphone quinoa tumblr you probably haven't heard of them high life gentrify gluten-free Austin.
+  </p>
+
+  <p>
+    &lt;-- END Placeholder text so we can scroll. --&gt;
   </p>
 </body>
 </html>
