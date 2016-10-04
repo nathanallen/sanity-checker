@@ -73,6 +73,8 @@ var sanityChecker = (function(){
       self.errors.push(e.message);
     } else if (["IMG", "LINK"].includes(e.srcElement.tagName)) {
       // TODO: capture img / link load errrors?
+      // WARNING: this check prevents infinite loop scenario in which modal loads broken img
+      //          which raises error and launches modal
       return;
     } else if (e.srcElement.src.startsWith(self.origin)) {
       // i.e. failed to find a local script (from the same origin)
