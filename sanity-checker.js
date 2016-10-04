@@ -128,7 +128,7 @@ var sanityChecker = (function(){
     el.innerHTML = (
       "<button style='float: right;' onclick='window.parent.sanityChecker.close()'>X</button>" +
       "<h1>" +
-        "<img style='float: left; padding-right: .3em;' src='" + config.image + "'>" +
+        "<img style='float: left; padding-right: .3em; max-height: 80px;' src='" + config.image + "'>" +
         config.title +
       "</h1>" +
       "<p>" + config.message + "</p>"
