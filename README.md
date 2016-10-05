@@ -43,6 +43,6 @@ sanityChecker.reset();      // reset stats in localstorage
 A sandbox environment is available in `/test/index.html` (as well as online at [http://nathan.codes/sanity-checker/test/](http://nathan.codes/sanity-checker/test/)) for manual configuration and testing of the script.
 
 ## Known Limitations
-* Presumably for security reasons, when an error is thrown/raised in a script file loaded from a remote origin, the error event will not identify the script or file that raised it.
+* When an error occurs in an external (as opposed to _internal_) script, the error event will not identify the source of the error (presumably for security reasons). We know an error was thrown, we don't know where or what.
 * Javascript [errors thrown directly from the console](http://stackoverflow.com/questions/17534054/chrome-will-an-error-in-code-invoked-from-the-dev-console-trigger-window-onerro) do not bubble up to the window, meaning code may safely be tested in the console without launching the warning modal (it's a feature not a bug!)
-* On chrome using `window.console.error` displays an error-like message in the console but does not in fact _throw_ or _raise_ an error and so cannot be captured.
+* On Chrome using `window.console.error` displays an error-like message in the console but does not in fact _throw_ or _raise_ an error and so cannot be captured.
